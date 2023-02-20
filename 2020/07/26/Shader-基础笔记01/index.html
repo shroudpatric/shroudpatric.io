@@ -1,32 +1,230 @@
-extends includes/layout.pug
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Shader 基础笔记01 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Shader 基础笔记该部分笔记对应入门精要中 1、2、3 章内容 Shader 渲染流程在 OpenGl 中，矩阵的变换过程如下。 为了将坐标从一个坐标系变换到另一个坐标系，我们需要用到几个变换矩阵，最重要的几个分别是模型(Model)、观察(View)、投影(Projection)三个矩阵。我们的顶点坐标起始于局部空间(Local Space)，在这里它称为局部坐标(Local Coordin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shader 基础笔记01">
+<meta property="og:url" content="http://xiaozhugit.gitee.io/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B001/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Shader 基础笔记该部分笔记对应入门精要中 1、2、3 章内容 Shader 渲染流程在 OpenGl 中，矩阵的变换过程如下。 为了将坐标从一个坐标系变换到另一个坐标系，我们需要用到几个变换矩阵，最重要的几个分别是模型(Model)、观察(View)、投影(Projection)三个矩阵。我们的顶点坐标起始于局部空间(Local Space)，在这里它称为局部坐标(Local Coordin">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2020-07-26T03:18:29.000Z">
+<meta property="article:modified_time" content="2023-01-11T09:28:20.363Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Shader">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/shroud/img/favicon.png"><link rel="canonical" href="http://xiaozhugit.gitee.io/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B001/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/shroud/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/shroud/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Shader 基础笔记01',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-01-11 17:28:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
 
-block content
-  #post
-    if top_img === false
-      include includes/header/post-info.pug
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
 
-    article#article-container.post-content!=page.content
-    include includes/post/post-copyright.pug
-    .tag_share
-      if (theme.post_meta.post.tags)
-        .post-meta__tag-list
-          each item, index in page.tags.data
-            a(href=url_for(item.path)).post-meta__tags #[=item.name]
-      include includes/third-party/share/index.pug
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
         
-    if theme.reward.enable && theme.reward.QR_code
-      !=partial('includes/post/reward', {}, {cache: true})
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/shroud/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/shroud/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/shroud/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/shroud/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Shader 基础笔记01</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-07-26T03:18:29.000Z" title="Created 2020-07-26 11:18:29">2020-07-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-01-11T09:28:20.363Z" title="Updated 2023-01-11 17:28:20">2023-01-11</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Shader 基础笔记01"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Shader-基础笔记"><a href="#Shader-基础笔记" class="headerlink" title="Shader 基础笔记"></a>Shader 基础笔记</h1><p>该部分笔记对应入门精要中 1、2、3 章内容</p>
+<h2 id="Shader-渲染流程"><a href="#Shader-渲染流程" class="headerlink" title="Shader 渲染流程"></a>Shader 渲染流程</h2><p>在 OpenGl 中，矩阵的变换过程<a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/01%20Getting%20started/08%20Coordinate%20Systems/#_2">如下</a>。</p>
+<p>为了将坐标从一个坐标系变换到另一个坐标系，我们需要用到几个变换矩阵，最重要的几个分别是模型(Model)、观察(View)、投影(Projection)三个矩阵。我们的顶点坐标起始于局部空间(Local Space)，在这里它称为局部坐标(Local Coordinate)，它在之后会变为世界坐标(World Coordinate)，观察坐标(View Coordinate)，裁剪坐标(Clip Coordinate)，并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<br><img src="https://i.328888.xyz/2022/12/14/y9O1C.png" alt="y9O1C.png"></p>
+<ul>
+<li>《Render-Time Rendering,Third Edition》一书中将一个渲染流程分成三个阶段：应用阶段(Application Stage)、几何阶段(Germetry Stage)，光栅化阶(Rasterizer Stage)段。</li>
+</ul>
+<h3 id="应用阶段"><a href="#应用阶段" class="headerlink" title="应用阶段"></a>应用阶段</h3><ul>
+<li>准备场景数据，如摄像机的位置、视锥体、场景中包含了哪些模型、使用了那些光源等。</li>
+<li>设置模型的渲染状态包括材质、纹理、Shader等。</li>
+</ul>
+<h3 id="几何阶段"><a href="#几何阶段" class="headerlink" title="几何阶段"></a>几何阶段</h3><ul>
+<li>逐顶点，逐多边形操作。将顶点坐标变换到屏幕空间中，交给光栅器处理。</li>
+<li>这一阶段将会输出屏幕空间的二位顶点坐标、每个顶点对应的深度值、着色等相关信息，并传递给下一阶段。</li>
+</ul>
+<h3 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h3><p>-决定每个渲染图元中的哪些像素应该被绘制在屏幕上。<br>-需要对上一个阶段得到的逐顶点数据进行插值，然后进行逐像素处理。</p>
+<h2 id="Unity-中的几种-Shader-模板"><a href="#Unity-中的几种-Shader-模板" class="headerlink" title="Unity 中的几种 Shader 模板"></a>Unity 中的几种 Shader 模板</h2><h3 id="Standard-Surface-Shader"><a href="#Standard-Surface-Shader" class="headerlink" title="Standard Surface Shader"></a>Standard Surface Shader</h3><ul>
+<li>包含了一个标准光照模型的表面着色器模板</li>
+</ul>
+<h3 id="Unlit-Shader"><a href="#Unlit-Shader" class="headerlink" title="Unlit Shader"></a>Unlit Shader</h3><ul>
+<li>一个不包含光照（但包含雾效）的基本的顶点&#x2F;片元着色器。</li>
+</ul>
+<h3 id="Image-Effect-Shader"><a href="#Image-Effect-Shader" class="headerlink" title="Image Effect Shader"></a>Image Effect Shader</h3><ul>
+<li>实现各种屏幕后处理效果的基本模板</li>
+</ul>
+<h3 id="Compute-Shader"><a href="#Compute-Shader" class="headerlink" title="Compute Shader"></a>Compute Shader</h3><ul>
+<li>特殊 Shader 类型，利用 GPU 的并行性来进行一些与常规渲染流水线无关的计算。</li>
+</ul>
+<h2 id="Unity-Shader-和-材质的桥梁"><a href="#Unity-Shader-和-材质的桥梁" class="headerlink" title="Unity Shader 和 材质的桥梁"></a>Unity Shader 和 材质的桥梁</h2><ul>
+<li>Properties 语义块 包含了一系列属性，将会出现在材质面板中，定义通常如下<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Properties &#123;</span><br><span class="line">	Name (&quot;display name&quot;,PropertyType) = DefaultValue</span><br><span class="line">	Name (&quot;display name&quot;,PropertyType) = DefaultValue</span><br><span class="line">	//更多属性</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Properties 语义块支持的属性类型</li>
+</ul>
+<p>属性类型| 默认值的定义语法| 例子<br>—-   						| —            			  	|—-<br>Int    						|  number        			  	| _Int(“Int”,Int) &#x3D; 2<br>Float  						|  number        				| _Float(“Float”,Float) &#x3D; 1.5<br>Range(min,max)				| number  						| _Range(“Range”,Range(0.0,5.0)) &#x3D; 3.0<br>Color  						| (number,number,number,number)	| _Color(“Color”,Color) &#x3D; (1,1,1,1)<br>Vector 						| (number,number,number,number)	| _Vector(“Vector”,Vector) &#x3D; (2,3,6,1)<br>2D     						|  “defaulttexture”{}		  	| _2D(“2D”,2D) &#x3D; “”{}<br>Cube   						|  “defaulttexture”{}   		| _Cube(“Cube”,Cube) &#x3D; “White”{}<br>3D     						|  “defaulttexture”{}		  	| _3D(“3D”,3D) &#x3D; “black”{}</p>
+<ul>
+<li>可以在 CG 片段中定义和属性类型相匹配的变量，即使不在 Properties 语义块中声明这些属性。<br>因此在语义块中定义属性的意义在于让这些属性出现在材质面板中。</li>
+</ul>
+<h2 id="SubShader-的-构成"><a href="#SubShader-的-构成" class="headerlink" title="SubShader 的 构成"></a>SubShader 的 构成</h2><ul>
+<li>SubShader 的语义块结构如下</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SubShader &#123;</span><br><span class="line">	//可选的</span><br><span class="line">	[Tags]</span><br><span class="line"></span><br><span class="line"> 	//可选的</span><br><span class="line"> 	[RenderSetup]</span><br><span class="line"></span><br><span class="line"> 	Pass&#123;</span><br><span class="line"></span><br><span class="line"> 	&#125;</span><br><span class="line"></span><br><span class="line"> 	// Other Passes</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="RenderSetup-状态设置"><a href="#RenderSetup-状态设置" class="headerlink" title="RenderSetup 状态设置"></a>RenderSetup 状态设置</h3><ul>
+<li>常见的渲染状态设置选项</li>
+</ul>
+<p>状态名称							|         		设置指令             			| 					解释<br>—-   							|              —            					|—-<br>Cull   							| Cull Back &#x2F; Front &#x2F; Off     					| 设置剔除模式：剔除背面&#x2F;正面&#x2F;关闭剔除<br>ZTest  							| ZTest Less Greater &#x2F; LEqual &#x2F; GEqual &#x2F; Equal &#x2F; NotEqual &#x2F; Always | 设置深度测试时使用的函数<br>ZWrite 							| ZWrite On &#x2F; Off             					| 开启 &#x2F; 关闭 深度写入<br>Blend  							| Blend SrcFactor DstFactor   					| 开启并设置混合模式</p>
+<h3 id="Tags-标签"><a href="#Tags-标签" class="headerlink" title="Tags 标签"></a>Tags 标签</h3><ul>
+<li><p>SubShader 中的标签设置是特定的，和 Pass 中使用的标签是不一样的。 (标签设置[Tags])<br>状态设置 [RenderSetup] SubShader 和 Pass 是一样的, SubShader 的设置会应用于所有的 Pass。</p>
+</li>
+<li><p>[Tags] 是一个键值对，结构如下</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tags &#123; &quot;TagName1&quot; = &quot;Value1&quot; &quot;TagName2&quot; = &quot;Value2&quot; &#125;</span><br></pre></td></tr></table></figure>
 
-    //- ad
-    if theme.ad && theme.ad.post
-      .ads-wrap!=theme.ad.post
 
-    if theme.post_pagination
-      include includes/pagination.pug
-    if theme.related_post && theme.related_post.enable
-      != related_posts(page,site.posts)
+<p>SubShader 的标签类型</p>
+<p>标签类型					     |        	说明     				 	  | 					例子<br>—–					        |              —–            		 						 |					—-<br>Queue							| 控制渲染顺序,指定该物体属于哪一个渲染队列							|	  Tags {“Queue” &#x3D; “Transparent” }<br>RenderTYpe						| 对着色器进行分类												  |		Tags {“RenderType” &#x3D; “Opaque”}<br>DisableBatching					| 是否使用批处理												  |		Tags {“DisableBatching” &#x3D; “True”}<br>ForceNoShadowCasting			| 是否会投射阴影												  |		Tags {“ForceNoShadowCasting” &#x3D; “True”}<br>IgnoreProjector					| 是否受 Projector 的影响										  |		Tags {“OgnoreProjector” &#x3D; “True”}<br>CanUseSpriteAltas				| 是否用于 Sprite 										 	 	  |		Tags {“CanUseSpriteAltas” &#x3D; “False”}<br>PreviewType						| 指明材质面板如何预览该材质									   |	 Tags {“PreviewType” &#x3D; “Plane”}</p>
+<p>Pass 语义块 结构如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Pass&#123;</span><br><span class="line">	[Name]</span><br><span class="line">	[Tags]</span><br><span class="line">	[RenderSetup]</span><br><span class="line"></span><br><span class="line">	// Other Code</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    if page.comments !== false && theme.comments && theme.comments.use
-      - var commentsJsLoad = true
-      !=partial('includes/third-party/comments/index', {}, {cache: true})
-      
+<p>可以通过 ShaderLab 的 UsePass 命令来直接使用其他 Unity Shader 中的 Pass。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserPass &quot;MyShader/MYPASSNAME&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Pass 的标签类型</p>
+<p>标签类型 				| 					说明					 | 						例子<br>—–					|		——								|			—–<br>LightMode				|		定义该 Pass 在 Unity 的渲染流水线中的角色			|    Tags {“LightMode” &#x3D; “ForwardBase”}<br>RequireOptions			|		用于指定当满足某些条件时才渲染该 Pass 的			 |		Tags {“RequireOptions” &#x3D; “SoftVegtation”}	</p>
+<p>Unity 内部会把所有 Pass 的名称转换成大写字母，因此在使用 UsePass 命令时必须使用大写形式的名字。</p>
+<p>特殊 Pass：<br>UsePass：可以使用该命令来复用其他 Unity Shader 中的 Pass。<br>GrabPass： 该 Pass 负责抓取屏幕并将结果存储在一张纹理中，以用于后续的 Pass 处理。</p>
+<p>Fallback：如果上面所有的 SubShader 都不能运行，那么就执行此语句。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Fallback &quot;name&quot;</span><br><span class="line"></span><br><span class="line">//关闭 Fallback 功能</span><br><span class="line">Fallback Off </span><br></pre></td></tr></table></figure>
+
+<p>Fallback 还会影响阴影的投射。在渲染阴影纹理时，Unity 会在每个 Unity Shader 中寻找一个阴影投射的<br>Pass。一般我们不需要自己专门实现 Pass，Fallback 会使用内置 Shader 一个通用的 Pass。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">float4 vert(float4 v : POSITION) : SV_POSITION&#123;</span><br><span class="line">	return mul (UNITY_MATRIX_MVP);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> POSITION 表示将模型的顶点坐标填充到输入参数 v 中，SV_POSITION 表示 顶点着色器的输出是裁剪空间中<br> 的顶点坐标。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fixed4 frag() :SV_Target&#123;</span><br><span class="line">	return fixed(1,1,1,1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> SV_Target 表示把用户的输出颜色存储到一个渲染目标,这里将输出到默认的帧缓存中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//输入数据</span><br><span class="line">struce a2v&#123;</span><br><span class="line">	// POSITION 语义告诉 Unity，用模型空间的顶点坐标填充 vertex 变量</span><br><span class="line">	float4 vertex : POSITION;</span><br><span class="line">	// NORMAL 语义告诉 Unity，用模型空间的法线法向填充 normal 变量</span><br><span class="line">	float3 normal : NORMAL;</span><br><span class="line">	// TEXCOORD0 语义告诉 Unity，用模型的第一套纹理坐标填充 texcoord 变量</span><br><span class="line">	float4 texcoord : TEXCOORD0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://xiaozhugit.gitee.io/shroud">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://xiaozhugit.gitee.io/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B001/">http://xiaozhugit.gitee.io/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B001/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/shroud/tags/Shader/">Shader</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/shroud/2020/07/26/GPU-Instancing/" title="GPU Instancing"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">GPU Instancing</div></div></a></div><div class="next-post pull-right"><a href="/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B002/" title="Shader 基础笔记02"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Shader 基础笔记02</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/shroud/2020/07/26/CSAA%20-%20%E7%AC%94%E8%AE%B0/" title="Shader 数学基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">Shader 数学基础</div></div></a></div><div><a href="/shroud/2020/07/26/GPU-Instancing/" title="GPU Instancing"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">GPU Instancing</div></div></a></div><div><a href="/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B002/" title="Shader 基础笔记02"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">Shader 基础笔记02</div></div></a></div><div><a href="/shroud/2020/07/26/Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B003/" title="Shader 基础笔记03"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">Shader 基础笔记03</div></div></a></div><div><a href="/shroud/2020/07/26/%E6%8A%97%E9%94%AF%E9%BD%BF/" title="抗锯齿"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">抗锯齿</div></div></a></div><div><a href="/shroud/2020/07/26/shader%20-%20%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/" title="Shader 数学基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-26</div><div class="title">Shader 数学基础</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/shroud/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/shroud/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/shroud/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a><a href="/shroud/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Shader-%E5%9F%BA%E7%A1%80%E7%AC%94%E8%AE%B0"><span class="toc-number">1.</span> <span class="toc-text">Shader 基础笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Shader-%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">Shader 渲染流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">应用阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%A0%E4%BD%95%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">几何阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E6%A0%85%E5%8C%96%E9%98%B6%E6%AE%B5"><span class="toc-number">1.1.3.</span> <span class="toc-text">光栅化阶段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-%E4%B8%AD%E7%9A%84%E5%87%A0%E7%A7%8D-Shader-%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.2.</span> <span class="toc-text">Unity 中的几种 Shader 模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Standard-Surface-Shader"><span class="toc-number">1.2.1.</span> <span class="toc-text">Standard Surface Shader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unlit-Shader"><span class="toc-number">1.2.2.</span> <span class="toc-text">Unlit Shader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Image-Effect-Shader"><span class="toc-number">1.2.3.</span> <span class="toc-text">Image Effect Shader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Compute-Shader"><span class="toc-number">1.2.4.</span> <span class="toc-text">Compute Shader</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unity-Shader-%E5%92%8C-%E6%9D%90%E8%B4%A8%E7%9A%84%E6%A1%A5%E6%A2%81"><span class="toc-number">1.3.</span> <span class="toc-text">Unity Shader 和 材质的桥梁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SubShader-%E7%9A%84-%E6%9E%84%E6%88%90"><span class="toc-number">1.4.</span> <span class="toc-text">SubShader 的 构成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RenderSetup-%E7%8A%B6%E6%80%81%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.4.1.</span> <span class="toc-text">RenderSetup 状态设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tags-%E6%A0%87%E7%AD%BE"><span class="toc-number">1.4.2.</span> <span class="toc-text">Tags 标签</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/shroud/2023/02/19/Shader%20%E5%85%A5%E9%97%A8%E7%B2%BE%E8%A6%81%2012%20%E7%AB%A0%E6%80%BB%E7%BB%93/" title="Shader 入门精要 12 章总结">Shader 入门精要 12 章总结</a><time datetime="2023-02-19T14:17:33.532Z" title="Created 2023-02-19 22:17:33">2023-02-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/shroud/2023/02/14/%E6%BA%B6%E8%A7%A3%20-%20Shader/%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80/" title="No title">No title</a><time datetime="2023-02-14T15:09:21.664Z" title="Created 2023-02-14 23:09:21">2023-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/shroud/2023/02/14/%E6%8A%97%E9%94%AF%E9%BD%BF/%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80/" title="No title">No title</a><time datetime="2023-02-14T15:09:19.698Z" title="Created 2023-02-14 23:09:19">2023-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/shroud/2023/02/14/%E7%83%98%E7%84%99%E7%AC%94%E8%AE%B0/%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80/" title="No title">No title</a><time datetime="2023-02-14T15:09:17.558Z" title="Created 2023-02-14 23:09:17">2023-02-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/shroud/2023/02/14/Unity%20Shader%20%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/%E5%9B%BE%E7%89%87%E5%9C%B0%E5%9D%80/" title="No title">No title</a><time datetime="2023-02-14T15:09:15.717Z" title="Created 2023-02-14 23:09:15">2023-02-14</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/shroud/js/utils.js"></script><script src="/shroud/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
